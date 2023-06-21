@@ -1,0 +1,24 @@
+#title {
+    font-family: 'Ubuntu', sans-serif;
+    position: absolute;
+    left: 550px;
+}
+#copyright {
+    margin-top: 0px;
+    position: relative;
+}
+#headline {
+    margin-bottom: 0px;
+}
+#dark {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+@media screen and (max-width: 945px) {
+    #title {
+        position: relative;
+        left: 0;
+    }
+}
