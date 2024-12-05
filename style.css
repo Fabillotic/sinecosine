@@ -1,5 +1,7 @@
-#title {
+body {
 	font-family: 'Ubuntu', sans-serif;
+}
+#title {
 	position: absolute;
 	left: 550px;
 }
@@ -9,7 +11,17 @@
 #dark {
 	position: absolute;
 	right: 10px;
-	top: 10px;
+	top: 20px;
+}
+.lbltext {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 @media screen and (max-width: 945px) {

@@ -1,4 +1,7 @@
 let slider;
+let lblsin;
+let lblcos;
+let lbltan;
 
 let sx = 600;
 let sy = 600;
@@ -15,6 +18,7 @@ var circle_stickout;
 
 var graph_y;
 
+var graph_ymax = 2.0;
 var graph_height;
 
 function updateScale() {
@@ -26,9 +30,9 @@ function updateScale() {
 
 	circle_stickout = sm / 50;
 
-	graph_y = offset_circle + circle_size * 3;
+	graph_y = offset_circle + circle_size * 3.5;
 
-	graph_height = circle_size / 2;
+	graph_height = circle_size;
 }
 
 function changeSize(_sx, _sy) {
@@ -44,15 +48,43 @@ function setup() {
 	createCanvas(sx, sy);
 	slider = createSlider(0, TAU, 0, 0);
 	sliderSetup();
+
+	lblsin = makeLabel("sin", "red");
+	lblcos = makeLabel("cos", "blue");
+	lbltan = makeLabel("tan", "orange");
 }
 
 function sliderSetup() {
-	slider.position(offset_graph, 0, "relative");
+	//slider.position(offset_graph, 0, "relative");
+	slider.position(offset_graph, 0, "absolute");
 	slider.style("width", (sx - (offset_graph * 2)) + "px");
 }
 
+function makeLabel(text, color) {
+	lbl = createP(text);
+	lbl.position(0, 0, "absolute");
+	lbl.addClass("lbltext");
+	if(color !== null) {
+		lbl.style("color", color);
+	}
+
+	return lbl;
+}
+
+function moveLabel(lbl, x, y) {
+	if(lbl !== null) {
+		lbl.style("display", "inline");
+		lbl.position(x, y, "absolute");
+	}
+}
+
+function hideLabel(lbl, x, y) {
+	if(lbl !== null) {
+		lbl.style("display", "none");
+	}
+}
+
 var x = 0;
-//var isdown = false; //invisible slider variable
 
 function draw() {
 	let ww = min(windowWidth, windowHeight);
@@ -83,46 +115,56 @@ function draw() {
 	//Long diagram line
 	line(offset_graph - 2, graph_y, graph_length, graph_y);
 
-	//Little markers
+	//Little x markers
 	for (let i = HALF_PI; i < TAU + HALF_PI; i += HALF_PI) {
 		let j = map_l(i - QUARTER_PI);
 		line(j, graph_y - 5, j, graph_y + 5);
 	}
 
-	//Little markers
+	//Large x markers
 	for (let i = HALF_PI; i < TAU; i += HALF_PI) {
 		let j = map_l(i);
 		line(j, graph_y - 10, j, graph_y + 10);
 	}
 
+	//y markers
+	for (let i = -(graph_ymax - 1.0); i < graph_ymax; i += 1.0) {
+		let j = graph_y - (graph_height / graph_ymax) * i;
+		line(offset_graph - 2 - 5, j, offset_graph - 2 + 5, j);
+	}
+
 	x = slider.value();
-	/* Invisible slider
-	if(isdown || (mouseIsPressed && mouseX > offset_graph && mouseX < graph_length && mouseY > graph_y - graph_height && mouseY < graph_y + graph_height)) {
-		isdown = true;
-		x = map(mouseX, offset_graph, graph_length, 0, TAU, true);
-	}
-	if(!mouseIsPressed) {
-		isdown = false;
-	}
-	*/
 
 	let c = map_l(x);
-	let v = sin(x) * -graph_height + graph_y;
-	let w = cos(x) * -graph_height + graph_y;
+	let y_scale = -graph_height / graph_ymax;
 
-	//sin, cos line
-
-	function drawGraph(f, red=0, green=255, blue=0, offset=1) {
+	function drawGraph(f, lbl, red=0, green=255, blue=0, offset=1) {
 		strokeWeight(2);
 		stroke(red, green, blue);
-		line(c + offset, graph_y, c + offset, f(x) * -graph_height + graph_y);
+
+		let gy = graph_y + f(x) * y_scale;
+		if(gy >= graph_y - graph_height && gy <= graph_y + graph_height) {
+			moveLabel(lbl, c + offset + 10, gy);
+		}
+		else {
+			hideLabel(lbl);
+		}
+
+		gy = max(gy, graph_y - graph_height);
+		gy = min(gy, graph_y + graph_height);
+		line(c + offset, graph_y, c + offset, gy);
 
 		let lx = map_l(0);
 		let ly = graph_y;
 
 		for(let i = 0; i < x; i += 0.01) {
 			let tx = map_l(i);
-			let ty = f(i) * -graph_height + graph_y;
+			let ty = f(i) * y_scale + graph_y;
+			if(ty < graph_y - graph_height || ty > graph_y + graph_height) {
+				lx = tx;
+				ly = ty;
+				continue;
+			}
 			line(tx, ty, lx, ly);
 			lx = tx;
 			ly = ty;
@@ -130,8 +172,9 @@ function draw() {
 		strokeWeight(1);
 	}
 
-	drawGraph(sin, red=255, green=0, blue=0, offset=-1)
-	drawGraph(cos, red=0, green=0, blue=255, offset=0)
+	drawGraph(sin, lblsin, red=255, green=0, blue=0, offset=-1)
+	drawGraph(cos, lblcos, red=0, green=0, blue=255, offset=0)
+	drawGraph(tan, lbltan, red=255, green=165, blue=0, offset=-2)
 
 	//"Point"
 	noStroke();
