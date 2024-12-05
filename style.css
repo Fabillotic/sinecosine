@@ -1,6 +1,9 @@
 body {
 	font-family: 'Ubuntu', sans-serif;
 }
+#sketch {
+	position: relative;
+}
 #title {
 	position: absolute;
 	left: 550px;

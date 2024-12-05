@@ -45,7 +45,13 @@ function changeSize(_sx, _sy) {
 
 function setup() {
 	updateScale();
-	createCanvas(sx, sy);
+
+	let canvas = createCanvas(sx, sy);
+	let originalParent = canvas.parent();
+	canvas.parent("sketch");
+	originalParent.remove();
+	canvas.position(0, 0, "absolute");
+
 	slider = createSlider(0, TAU, 0, 0);
 	sliderSetup();
 
@@ -62,8 +68,9 @@ function sliderSetup() {
 
 function makeLabel(text, color) {
 	lbl = createP(text);
-	lbl.position(0, 0, "absolute");
+	lbl.style("display", "none");
 	lbl.addClass("lbltext");
+	lbl.parent("sketch");
 	if(color !== null) {
 		lbl.style("color", color);
 	}
@@ -176,19 +183,19 @@ function draw() {
 	drawGraph(cos, lblcos, red=0, green=0, blue=255, offset=0)
 	drawGraph(tan, lbltan, red=255, green=165, blue=0, offset=-2)
 
-	//"Point"
-	noStroke();
-	fill(tertiary);
-
 	let px = cos(x) * circle_size + circle_center;
 	let py = sin(x) * -circle_size + circle_center;
-
-	circle(px, py, 10);
+	let oy = tan(x) * -circle_size + circle_center;
+	let oy_vis = oy <= circle_center + circle_size * 1.5 &&
+		oy >= circle_center - circle_size * 1.5;
 
 	//Triangle
-	noFill();
-	stroke(tertiary);
 	strokeWeight(2);
+	if(oy_vis) {
+		stroke(255, 165, 0);
+		line(circle_center, circle_center, circle_center + circle_size, oy);
+	}
+	stroke(tertiary);
 	line(circle_center, circle_center, px, py);
 
 	stroke(255, 0, 0);
@@ -196,6 +203,25 @@ function draw() {
 
 	stroke(0, 0, 255);
 	line(circle_center, circle_center, px, circle_center);
+
+	if(oy_vis) {
+		stroke(255, 165, 0);
+		line(circle_center + circle_size, circle_center,
+			circle_center + circle_size, oy);
+	}
+
+	//"Point"
+	noStroke();
+
+	if(oy_vis) {
+		fill(255, 165, 0);
+		circle(circle_center + circle_size, oy, 10);
+	}
+
+	fill(tertiary);
+	circle(px, py, 10);
+
+	noFill();
 
 	//Triangle angle
 	stroke(tertiary);
