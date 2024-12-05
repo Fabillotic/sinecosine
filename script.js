@@ -119,8 +119,21 @@ function draw() {
 
 	map_l = (x) => {return map(x, 0, TAU, offset_graph, graph_length)};
 
-	//Long diagram line
+	// x-axis line
 	line(offset_graph - 2, graph_y, graph_length, graph_y);
+
+	// Diagram arrows x-axis
+	line(graph_length, graph_y, graph_length - 10, graph_y - 10);
+	line(graph_length, graph_y, graph_length - 10, graph_y + 10);
+
+	// y axis line
+	line(offset_graph - 2, graph_y - graph_height, offset_graph - 2, graph_y + graph_height);
+
+	// Diagram arrows y-axis
+	line(offset_graph - 2 - 10, graph_y - graph_height + 10, offset_graph - 2,
+		graph_y - graph_height);
+	line(offset_graph - 2 + 10, graph_y - graph_height + 10, offset_graph - 2,
+		graph_y - graph_height);
 
 	//Little x markers
 	for (let i = HALF_PI; i < TAU + HALF_PI; i += HALF_PI) {
@@ -192,7 +205,7 @@ function draw() {
 	//Triangle
 	strokeWeight(2);
 	if(oy_vis) {
-		stroke(255, 165, 0);
+		stroke(165, 165, 165);
 		line(circle_center, circle_center, circle_center + circle_size, oy);
 	}
 	stroke(tertiary);
@@ -227,8 +240,6 @@ function draw() {
 	stroke(tertiary);
 	arc(circle_center, circle_center, circle_size / 2, circle_size / 2, -x, 0);
 
-	//y axis
 	strokeWeight(1);
 	stroke(secondary);
-	line(offset_graph - 2, graph_y - graph_height, offset_graph - 2, graph_y + graph_height);
 }
