@@ -1,13 +1,16 @@
 body {
 	font-family: 'Ubuntu', sans-serif;
 }
+canvas {
+	z-index: -1;
+}
 #sketch {
 	position: relative;
 }
 #title {
 	position: absolute;
-	left: 550px;
-	z-index: 2;
+	left: 50%;
+	transform: translate(-50%);
 }
 #headline {
 	margin-bottom: 0px;
@@ -32,5 +35,6 @@ body {
 	#title {
 		position: relative;
 		left: 0;
+		transform: none;
 	}
 }

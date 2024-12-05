@@ -189,6 +189,21 @@ function draw() {
 			lx = tx;
 			ly = ty;
 		}
+
+		noStroke();
+		fill(red, green, blue);
+		for(let i = 0; i < TAU; i += 0.1) {
+			if(i < x) continue;
+
+			let tx = map_l(i);
+			let ty = f(i) * y_scale + graph_y;
+			if(ty < graph_y - graph_height || ty > graph_y + graph_height) {
+				continue;
+			}
+			circle(tx, ty, 5);
+		}
+
+		noFill();
 		strokeWeight(1);
 	}
 
@@ -198,16 +213,9 @@ function draw() {
 
 	let px = cos(x) * circle_size + circle_center;
 	let py = sin(x) * -circle_size + circle_center;
-	let oy = tan(x) * -circle_size + circle_center;
-	let oy_vis = oy <= circle_center + circle_size * 1.5 &&
-		oy >= circle_center - circle_size * 1.5;
 
 	//Triangle
 	strokeWeight(2);
-	if(oy_vis) {
-		stroke(165, 165, 165);
-		line(circle_center, circle_center, circle_center + circle_size, oy);
-	}
 	stroke(tertiary);
 	line(circle_center, circle_center, px, py);
 
@@ -217,19 +225,20 @@ function draw() {
 	stroke(0, 0, 255);
 	line(circle_center, circle_center, px, circle_center);
 
-	if(oy_vis) {
-		stroke(255, 165, 0);
-		line(circle_center + circle_size, circle_center,
-			circle_center + circle_size, oy);
+	stroke(255, 165, 0);
+	let tx = tan(x);
+	tx *= tx;
+	tx += 1;
+	tx = sqrt(tx);
+	if(x > HALF_PI && x < 3 * HALF_PI) {
+		line(px, py, circle_center - circle_size * tx, circle_center);
+	}
+	else {
+		line(px, py, circle_center + circle_size * tx, circle_center);
 	}
 
 	//"Point"
 	noStroke();
-
-	if(oy_vis) {
-		fill(255, 165, 0);
-		circle(circle_center + circle_size, oy, 10);
-	}
 
 	fill(tertiary);
 	circle(px, py, 10);
