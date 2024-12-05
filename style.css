@@ -1,20 +1,20 @@
 #title {
-    font-family: 'Ubuntu', sans-serif;
-    position: absolute;
-    left: 550px;
+	font-family: 'Ubuntu', sans-serif;
+	position: absolute;
+	left: 550px;
 }
 #headline {
-    margin-bottom: 0px;
+	margin-bottom: 0px;
 }
 #dark {
-    position: absolute;
-    right: 10px;
-    top: 10px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }
 
 @media screen and (max-width: 945px) {
-    #title {
-        position: relative;
-        left: 0;
-    }
+	#title {
+		position: relative;
+		left: 0;
+	}
 }
